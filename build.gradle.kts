@@ -5,7 +5,7 @@ plugins {
     kotlin("jvm")
 }
 
-val jsonVersion: String by project
+val jsonVersion: String = project.properties["json.version"] as String
 
 group = "com.arnyminerz.filamagenta"
 version = "0.1.0"
