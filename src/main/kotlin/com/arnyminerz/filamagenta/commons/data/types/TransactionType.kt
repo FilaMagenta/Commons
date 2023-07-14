@@ -1,5 +1,6 @@
 package com.arnyminerz.filamagenta.commons.data.types
 
+import com.arnyminerz.filamagenta.commons.utils.getIntOrNull
 import com.arnyminerz.filamagenta.commons.utils.getZonedDateTime
 import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializer
 import java.time.ZonedDateTime
@@ -24,7 +25,7 @@ data class TransactionType(
             json.getDouble("price_per_unit"),
             json.getString("description"),
             json.getInt("user_id"),
-            json.getInt("item_id")
+            json.getIntOrNull("item_id")
         )
     }
 
