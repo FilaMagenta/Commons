@@ -6,6 +6,7 @@ import java.time.ZonedDateTime
 import org.json.JSONObject
 
 data class TransactionType(
+    val id: Int,
     val timestamp: ZonedDateTime,
     val date: ZonedDateTime,
     val amount: Int,
@@ -16,6 +17,7 @@ data class TransactionType(
 ) : DataType {
     companion object: JsonSerializer<TransactionType> {
         override suspend fun fromJson(json: JSONObject): TransactionType = TransactionType(
+            json.getInt("id"),
             json.getZonedDateTime("timestamp"),
             json.getZonedDateTime("date"),
             json.getInt("amount"),
@@ -27,6 +29,7 @@ data class TransactionType(
     }
 
     override fun toJSON(): JSONObject = JSONObject().apply {
+        put("id", id)
         put("timestamp", timestamp.toString())
         put("date", date.toString())
         put("amount", amount)
