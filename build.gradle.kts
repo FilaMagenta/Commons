@@ -1,9 +1,10 @@
 plugins {
     kotlin("jvm") version "1.9.0"
     application
+    `maven-publish`
 }
 
-group = "com.arnyminerz.filamagenta"
+group = "com.arnyminerz.filamagenta.commons"
 version = "1.0.0"
 
 repositories {
