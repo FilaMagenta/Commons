@@ -1,44 +1,23 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    id("java")
-    kotlin("jvm")
+    kotlin("jvm") version "1.9.0"
+    application
 }
 
-val jsonVersion: String = project.properties["json.version"] as String
-
-group = "com.arnyminerz.filamagenta.commons"
-version = "0.1.0"
+group = "com.arnyminerz.filamagenta"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    implementation(kotlin("stdlib-jdk8"))
-
-    api("io.ktor:ktor-server-core:2.3.2")
-
-    api("org.json:json:$jsonVersion")
+    testImplementation(kotlin("test"))
 }
 
 tasks.test {
     useJUnitPlatform()
 }
 
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
-}
-
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = "1.8"
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+kotlin {
+    jvmToolchain(8)
 }
