@@ -36,8 +36,23 @@ fun JSONObject.getIntOrNull(key: String): Int? = try {
  * @param key A key string.
  * @return A float which is the value, or null, if there isn't any stored value with the given key.
  */
+@Deprecated(
+    "Float should not be used. Use Double instead.",
+    replaceWith = ReplaceWith("getDoubleOrNull")
+)
 fun JSONObject.getFloatOrNull(key: String): Float? = try {
     if (has(key)) getFloat(key) else null
+} catch (_: JSONException) {
+    null
+}
+
+/**
+ * Get the double associated with a key.
+ * @param key A key string.
+ * @return A double which is the value, or null, if there isn't any stored value with the given key.
+ */
+fun JSONObject.getDoubleOrNull(key: String): Double? = try {
+    if (has(key)) getDouble(key) else null
 } catch (_: JSONException) {
     null
 }
