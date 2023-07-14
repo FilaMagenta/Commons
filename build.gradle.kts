@@ -51,7 +51,7 @@ publishing {
                 scm {
                     connection.set("scm:git:git://github.com/FilaMagenta/Commons.git")
                     developerConnection.set("scm:git:ssh://github.com/FilaMagenta/Commons.git")
-                    url.set("http://github.com/FilaMagenta/Commons")
+                    url.set("https://github.com/FilaMagenta/Commons")
                 }
             }
         }
