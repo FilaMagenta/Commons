@@ -37,7 +37,9 @@ publishing {
 
             pom {
                 name.set("Filà Magenta Commons")
-                description.set("The main library for all Kotlin projects. Includes all common functions and classes for client and server.")
+                description.set(
+                    "The main library for all Kotlin projects. Includes all common components for client and server."
+                )
                 url.set("https://github.com/FilaMagenta/Commons")
                 developers {
                     developer {
