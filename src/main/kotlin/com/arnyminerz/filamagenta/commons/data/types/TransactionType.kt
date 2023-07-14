@@ -10,7 +10,7 @@ data class TransactionType(
     val timestamp: ZonedDateTime,
     val date: ZonedDateTime,
     val amount: Int,
-    val pricePerUnit: Float,
+    val pricePerUnit: Double,
     val description: String,
     val userId: Int,
     val itemId: Int?
@@ -21,14 +21,14 @@ data class TransactionType(
             json.getZonedDateTime("timestamp"),
             json.getZonedDateTime("date"),
             json.getInt("amount"),
-            json.getFloat("price_per_unit"),
+            json.getDouble("price_per_unit"),
             json.getString("description"),
             json.getInt("user_id"),
             json.getInt("item_id")
         )
     }
 
-    val balance: Float
+    val balance: Double
         get() = amount * pricePerUnit
 
     override fun toJSON(): JSONObject = JSONObject().apply {
