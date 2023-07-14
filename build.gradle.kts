@@ -15,6 +15,7 @@ dependencies {
     testImplementation(kotlin("test"))
 
     api("org.json:json:20230227")
+    api("io.ktor:ktor-server-core:2.3.2")
 }
 
 tasks.test {
