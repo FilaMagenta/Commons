@@ -7,7 +7,7 @@ plugins {
 
 val jsonVersion: String = project.properties["json.version"] as String
 
-group = "com.arnyminerz.filamagenta"
+group = "com.arnyminerz.filamagenta.commons"
 version = "0.1.0"
 
 repositories {
