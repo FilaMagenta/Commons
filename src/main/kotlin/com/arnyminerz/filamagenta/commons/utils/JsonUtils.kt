@@ -1,6 +1,9 @@
 package com.arnyminerz.filamagenta.commons.utils
 
 import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializable
+import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializer
+import java.time.ZonedDateTime
+import java.time.format.DateTimeParseException
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -60,6 +63,81 @@ fun JSONObject.getJSONObjectOrNull(key: String): JSONObject? = try {
 } catch (_: JSONException) {
     null
 }
+
+/**
+ * Gets the [ZonedDateTime] object associated with a key. Fetches a String first, and converts to [ZonedDateTime] using
+ * [ZonedDateTime.parse].
+ *
+ * @throws JSONException          If there is no string value for the key.
+ * @throws DateTimeParseException If the text cannot be parsed.
+ */
+fun JSONObject.getZonedDateTime(key: String): ZonedDateTime =
+    getString(key).let { ZonedDateTime.parse(it) }
+
+/**
+ * Gets the [ZonedDateTime] object associated with a key. Fetches a String first, and converts to [ZonedDateTime] using
+ * [ZonedDateTime.parse].
+ *
+ * @return A [ZonedDateTime] which is the value, or null, if there isn't any stored value with the given key.
+ */
+fun JSONObject.getZonedDateTimeOrNull(key: String): ZonedDateTime? = try {
+    if (has(key)) getString(key).let { ZonedDateTime.parse(it) } else null
+} catch (_: JSONException) {
+    null
+} catch (_: DateTimeParseException) {
+    null
+}
+
+/**
+ * Gets the [T] object associated with a key. Fetches a [String] first, converts it into [JSONObject], and uses
+ * [serializer] to convert it into a [T].
+ *
+ * @throws JSONException If there is no string value for the key, or the stored value is not a [JSONObject].
+ *
+ * @return A [T] object which is the serialization of the [String] stored at [key].
+ */
+suspend fun <T: JsonSerializable> JSONObject.getSerializable(key: String, serializer: JsonSerializer<T>): T =
+    getString(key).let { serializer.fromJson(JSONObject(it)) }
+
+/**
+ * Gets the [T] object associated with a key. Fetches a [String] first, converts it into [JSONObject], and uses
+ * [serializer] to convert it into a [T].
+ *
+ * @throws JSONException If there is no string value for the key, or the stored value is not a [JSONObject].
+ *
+ * @return A [T] object which is the serialization of the [String] stored at [key].
+ */
+suspend fun <T: JsonSerializable> JSONObject.getSerializableOrNull(key: String, serializer: JsonSerializer<T>): T? =
+    getStringOrNull(key)?.let {
+        try {
+            serializer.fromJson(JSONObject(it))
+        } catch (_: Exception) {
+            // fromJson can throw a lot of different exceptions, so catch all of them
+            null
+        }
+    }
+
+/**
+ * Gets the property of [T] named with the [String] value stored at [key].
+ *
+ * @throws JSONException If there is no string value for the key.
+ * @throws NullPointerException If the value stored at [key] is not a valid entry name of [T].
+ *
+ * @return The property of [T] stored at [key].
+ */
+inline fun <reified T: Enum<T>> JSONObject.getEnum(key: String): T =
+    getString(key).let { name -> enumValues<T>().find { it.name == name }!! }
+
+/**
+ * Gets the property of [T] named with the [String] value stored at [key].
+ *
+ * @throws JSONException If there is no string value for the key.
+ * @throws NullPointerException If the value stored at [key] is not a valid entry name of [T].
+ *
+ * @return The property of [T] stored at [key] or null if any error occurs.
+ */
+inline fun <reified T: Enum<T>> JSONObject.getEnumOrNull(key: String): T? =
+    getStringOrNull(key)?.let { name -> enumValues<T>().find { it.name == name } }
 
 fun jsonOf(vararg pairs: Pair<String, Any?>) =
     JSONObject().apply {

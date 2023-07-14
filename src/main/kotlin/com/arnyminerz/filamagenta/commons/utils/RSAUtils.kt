@@ -68,8 +68,30 @@ fun JSONObject.toRSAPrivateKey(): PrivateKey {
 fun JSONObject.getRSAPublicKey(key: String): PublicKey = getJSONObject(key).toRSAPublicKey()
 
 /**
+ * Uses [JSONObject.toRSAPublicKey] to get the key stored at position [key], or null if empty or not supported.
+ */
+fun JSONObject.getRSAPublicKeyOrNull(key: String): PublicKey? = try {
+    getJSONObjectOrNull(key)?.toRSAPublicKey()
+} catch (_: JSONException) {
+    null
+} catch (_: UnsupportedOperationException) {
+    null
+}
+
+/**
  * Uses [JSONObject.toRSAPrivateKey] to get the key stored at position [key].
  * @throws JSONException If the object doesn't contain all the required fields.
  * @throws UnsupportedOperationException If the object contains an unsupported key format.
  */
 fun JSONObject.getRSAPrivateKey(key: String): PrivateKey = getJSONObject(key).toRSAPrivateKey()
+
+/**
+ * Uses [JSONObject.toRSAPrivateKey] to get the key stored at position [key], or null if empty or not supported.
+ */
+fun JSONObject.getRSAPrivateKeyOrNull(key: String): PrivateKey? = try {
+    getJSONObjectOrNull(key)?.toRSAPrivateKey()
+} catch (_: JSONException) {
+    null
+} catch (_: UnsupportedOperationException) {
+    null
+}
