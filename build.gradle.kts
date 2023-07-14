@@ -12,6 +12,8 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+
+    api("org.json:json:20230227")
 }
 
 tasks.test {
