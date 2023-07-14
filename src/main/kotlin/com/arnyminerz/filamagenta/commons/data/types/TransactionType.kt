@@ -28,6 +28,9 @@ data class TransactionType(
         )
     }
 
+    val balance: Float
+        get() = amount * pricePerUnit
+
     override fun toJSON(): JSONObject = JSONObject().apply {
         put("id", id)
         put("timestamp", timestamp.toString())
