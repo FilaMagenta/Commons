@@ -1,5 +1,6 @@
 package com.arnyminerz.filamagenta.commons.data.types
 
+import com.arnyminerz.filamagenta.commons.data.Category
 import com.arnyminerz.filamagenta.commons.data.security.permissions.Role
 import com.arnyminerz.filamagenta.commons.utils.getEnum
 import com.arnyminerz.filamagenta.commons.utils.getStringOrNull
@@ -7,17 +8,21 @@ import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializer
 import org.json.JSONObject
 
 data class UserType(
+    val id: Int,
     val nif: String,
+    val category: Category,
     val role: Role,
     val name: String,
     val surname: String,
     val email: String,
-    val birthday: String? = null
+    val birthday: String? = null,
 ) : DataType {
     companion object: JsonSerializer<UserType> {
         override suspend fun fromJson(json: JSONObject): UserType = UserType(
+            json.getInt("id"),
             json.getString("nif"),
-            json.getEnum("name"),
+            json.getEnum("category"),
+            json.getEnum("role"),
             json.getString("name"),
             json.getString("surname"),
             json.getString("email"),
@@ -26,7 +31,9 @@ data class UserType(
     }
 
     override fun toJSON(): JSONObject = JSONObject().apply {
+        put("id", id)
         put("nif", nif)
+        put("category", category.name)
         put("role", role.name)
         put("name", name)
         put("surname", surname)
