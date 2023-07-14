@@ -13,6 +13,8 @@ import java.time.ZonedDateTime
 import org.json.JSONObject
 
 data class EventType(
+    val id: Int,
+    val timestamp: ZonedDateTime,
     val name: String,
     val description: String,
     val date: ZonedDateTime,
@@ -35,6 +37,8 @@ data class EventType(
         val MAX_GUESTS_DEFAULT: Int? = null
 
         override suspend fun fromJson(json: JSONObject): EventType = EventType(
+            json.getInt("id"),
+            json.getZonedDateTime("timestamp"),
             json.getString("name"),
             json.getString("description"),
             json.getZonedDateTime("date"),
@@ -49,6 +53,8 @@ data class EventType(
     override fun toString(): String = toJSON().toString()
 
     override fun toJSON(): JSONObject = JSONObject().apply {
+        put("id", id)
+        put("timestamp", timestamp.toString())
         put("name", name)
         put("description", description)
         put("date", date.toString())
