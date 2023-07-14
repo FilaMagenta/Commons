@@ -5,12 +5,12 @@ import org.json.JSONObject
 
 data class InventoryItemType(
     val name: String,
-    val unitPrice: Float
+    val unitPrice: Double
 ) : DataType {
     companion object: JsonSerializer<InventoryItemType> {
         override suspend fun fromJson(json: JSONObject): InventoryItemType = InventoryItemType(
             json.getString("name"),
-            json.getFloat("unit_price")
+            json.getDouble("unit_price")
         )
     }
 
