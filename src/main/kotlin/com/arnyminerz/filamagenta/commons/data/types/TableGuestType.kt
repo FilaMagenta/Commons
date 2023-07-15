@@ -11,8 +11,8 @@ data class TableGuestType(
     val name: String,
     val surname: String,
     val nif: String,
-    val responsibleId: Int,
-    val tableId: Int
+    val responsibleId: Long,
+    val tableId: Long
 ) : DataType(id, timestamp) {
     companion object: JsonSerializer<TableGuestType> {
         override suspend fun fromJson(json: JSONObject): TableGuestType = TableGuestType(
@@ -21,8 +21,8 @@ data class TableGuestType(
             json.getString("name"),
             json.getString("surname"),
             json.getString("nif"),
-            json.getInt("responsible"),
-            json.getInt("table")
+            json.getLong("responsible"),
+            json.getLong("table")
         )
     }
 

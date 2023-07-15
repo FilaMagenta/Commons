@@ -1,6 +1,6 @@
 package com.arnyminerz.filamagenta.commons.data.types
 
-import com.arnyminerz.filamagenta.commons.utils.getIntOrNull
+import com.arnyminerz.filamagenta.commons.utils.getLongOrNull
 import com.arnyminerz.filamagenta.commons.utils.getZonedDateTime
 import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializer
 import java.time.ZonedDateTime
@@ -13,8 +13,8 @@ data class TransactionType(
     val amount: Int,
     val pricePerUnit: Double,
     val description: String,
-    val userId: Int,
-    val itemId: Int?
+    val userId: Long,
+    val itemId: Long?
 ) : DataType(id, timestamp) {
     companion object: JsonSerializer<TransactionType> {
         override suspend fun fromJson(json: JSONObject): TransactionType = TransactionType(
@@ -24,8 +24,8 @@ data class TransactionType(
             json.getInt("amount"),
             json.getDouble("price_per_unit"),
             json.getString("description"),
-            json.getInt("user_id"),
-            json.getIntOrNull("item_id")
+            json.getLong("user_id"),
+            json.getLongOrNull("item_id")
         )
     }
 

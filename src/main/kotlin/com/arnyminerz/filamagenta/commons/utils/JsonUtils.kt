@@ -25,8 +25,23 @@ fun JSONObject.getStringOrNull(key: String, emptyIsNull: Boolean = false): Strin
  * @param key A key string.
  * @return An integer which is the value, or null, if there isn't any stored value with the given key.
  */
+@Deprecated(
+    "Int should not be used. Use Long instead.",
+    replaceWith = ReplaceWith("getLongOrNull")
+)
 fun JSONObject.getIntOrNull(key: String): Int? = try {
     if (has(key)) getInt(key) else null
+} catch (_: JSONException) {
+    null
+}
+
+/**
+ * Get the long associated with a key.
+ * @param key A key string.
+ * @return A long which is the value, or null, if there isn't any stored value with the given key.
+ */
+fun JSONObject.getLongOrNull(key: String): Long? = try {
+    if (has(key)) getLong(key) else null
 } catch (_: JSONException) {
     null
 }
