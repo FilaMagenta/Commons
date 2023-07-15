@@ -13,8 +13,8 @@ import java.time.ZonedDateTime
 import org.json.JSONObject
 
 data class EventType(
-    val id: Int,
-    val timestamp: ZonedDateTime,
+    override val id: Long,
+    override val timestamp: ZonedDateTime,
     val name: String,
     val description: String,
     val date: ZonedDateTime,
@@ -29,7 +29,7 @@ data class EventType(
      * May be null if the user is not admin while client, for example.
      */
     val privateKey: PrivateKey?
-) : DataType {
+) : DataType(id, timestamp) {
     companion object : JsonSerializer<EventType> {
         /**
          * The default value for the maximum allowed amount of guests
@@ -37,7 +37,7 @@ data class EventType(
         val MAX_GUESTS_DEFAULT: Int? = null
 
         override suspend fun fromJson(json: JSONObject): EventType = EventType(
-            json.getInt("id"),
+            json.getLong("id"),
             json.getZonedDateTime("timestamp"),
             json.getString("name"),
             json.getString("description"),

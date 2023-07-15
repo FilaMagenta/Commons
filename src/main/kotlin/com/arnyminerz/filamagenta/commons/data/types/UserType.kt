@@ -4,11 +4,14 @@ import com.arnyminerz.filamagenta.commons.data.Category
 import com.arnyminerz.filamagenta.commons.data.security.permissions.Role
 import com.arnyminerz.filamagenta.commons.utils.getEnum
 import com.arnyminerz.filamagenta.commons.utils.getStringOrNull
+import com.arnyminerz.filamagenta.commons.utils.getZonedDateTime
 import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializer
+import java.time.ZonedDateTime
 import org.json.JSONObject
 
 data class UserType(
-    val id: Int,
+    override val id: Long,
+    override val timestamp: ZonedDateTime,
     val nif: String,
     val category: Category,
     val role: Role,
@@ -16,10 +19,11 @@ data class UserType(
     val surname: String,
     val email: String,
     val birthday: String? = null,
-) : DataType {
+) : DataType(id, timestamp) {
     companion object: JsonSerializer<UserType> {
         override suspend fun fromJson(json: JSONObject): UserType = UserType(
-            json.getInt("id"),
+            json.getLong("id"),
+            json.getZonedDateTime("timestamp"),
             json.getString("nif"),
             json.getEnum("category"),
             json.getEnum("role"),
@@ -32,6 +36,7 @@ data class UserType(
 
     override fun toJSON(): JSONObject = JSONObject().apply {
         put("id", id)
+        put("timestamp", timestamp.toString())
         put("nif", nif)
         put("category", category.name)
         put("role", role.name)
