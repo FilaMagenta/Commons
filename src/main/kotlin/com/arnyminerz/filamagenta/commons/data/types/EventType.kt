@@ -1,6 +1,6 @@
 package com.arnyminerz.filamagenta.commons.data.types
 
-import com.arnyminerz.filamagenta.commons.utils.getIntOrNull
+import com.arnyminerz.filamagenta.commons.utils.getLongOrNull
 import com.arnyminerz.filamagenta.commons.utils.getRSAPrivateKeyOrNull
 import com.arnyminerz.filamagenta.commons.utils.getRSAPublicKey
 import com.arnyminerz.filamagenta.commons.utils.getZonedDateTime
@@ -20,7 +20,7 @@ data class EventType(
     val date: ZonedDateTime,
     val until: ZonedDateTime?,
     val reservations: ZonedDateTime?,
-    val maxGuests: Int? = MAX_GUESTS_DEFAULT,
+    val maxGuests: Long? = MAX_GUESTS_DEFAULT,
     /** The public encryption key for the event. Using for transferring data securely. */
     val publicKey: PublicKey,
     /**
@@ -34,7 +34,7 @@ data class EventType(
         /**
          * The default value for the maximum allowed amount of guests
          */
-        val MAX_GUESTS_DEFAULT: Int? = null
+        val MAX_GUESTS_DEFAULT: Long? = null
 
         override suspend fun fromJson(json: JSONObject): EventType = EventType(
             json.getLong("id"),
@@ -44,7 +44,7 @@ data class EventType(
             json.getZonedDateTime("date"),
             json.getZonedDateTimeOrNull("until"),
             json.getZonedDateTimeOrNull("reservations"),
-            json.getIntOrNull("max_guests"),
+            json.getLongOrNull("max_guests"),
             json.getJSONObject("key_pair").getRSAPublicKey("public"),
             json.getJSONObject("key_pair").getRSAPrivateKeyOrNull("private")
         )
