@@ -157,7 +157,12 @@ inline fun <reified T: Enum<T>> JSONObject.getEnumOrNull(key: String): T? =
 fun jsonOf(vararg pairs: Pair<String, Any?>) =
     JSONObject().apply {
         for ((key, value) in pairs)
-            put(key, value)
+            when (value) {
+                is JsonSerializable -> put(key, value.toJSON())
+                is ZonedDateTime -> put(key, value.toString())
+                is Enum<*> -> put(key, value.name)
+                else -> put(key, value)
+            }
     }
 
 /**
