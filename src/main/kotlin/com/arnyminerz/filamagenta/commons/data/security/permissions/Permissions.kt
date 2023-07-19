@@ -9,6 +9,8 @@ object Permissions : PermissionsList() {
 
     object Events : PermissionsList() {
         object Create : Permission()
+
+        object SetPrice : Permission()
     }
 
     object Transactions : PermissionsList() {
