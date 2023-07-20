@@ -4,6 +4,7 @@ import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializable
 import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializer
 import java.time.ZonedDateTime
 import java.time.format.DateTimeParseException
+import java.util.Base64
 import java.util.UUID
 import org.json.JSONArray
 import org.json.JSONException
@@ -180,6 +181,25 @@ inline fun <reified T: Enum<T>> JSONObject.getEnumOrNull(key: String): T? =
 fun JSONObject.getUUID(key: String): UUID =
     getString(key).let { UUID.fromString(it) }
 
+/**
+ * Retrieves the value associated with the specified key as a byte array from a JSON object.
+ *
+ * @param key The key to retrieve the value for.
+ *
+ * @return The byte array value associated with the key.
+ */
+fun JSONObject.getByteArray(key: String): ByteArray =
+    getString(key).let { Base64.getDecoder().decode(it) }
+
+/**
+ * Puts a byte array value into this JSONObject using the specified key.
+ *
+ * @param key The key to associate with the value.
+ * @param value The byte array value to be stored.
+ */
+fun JSONObject.putByteArray(key: String, value: ByteArray): JSONObject =
+    put(key, Base64.getEncoder().encodeToString(value))
+
 fun jsonOf(vararg pairs: Pair<String, Any?>) =
     JSONObject().apply {
         for ((key, value) in pairs)
@@ -188,6 +208,7 @@ fun jsonOf(vararg pairs: Pair<String, Any?>) =
                 is ZonedDateTime -> put(key, value.toString())
                 is Enum<*> -> put(key, value.name)
                 is UUID -> put(key, value.toString())
+                is ByteArray -> putByteArray(key, value)
                 else -> put(key, value)
             }
     }
