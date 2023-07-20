@@ -2,6 +2,8 @@ package com.arnyminerz.filamagenta.commons.utils
 
 import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializable
 import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializer
+import java.time.DateTimeException
+import java.time.Instant
 import java.time.ZonedDateTime
 import java.time.format.DateTimeParseException
 import java.util.Base64
@@ -103,6 +105,7 @@ fun JSONObject.getJSONObjectOrNull(key: String): JSONObject? = try {
  * @throws JSONException          If there is no string value for the key.
  * @throws DateTimeParseException If the text cannot be parsed.
  */
+@Deprecated("Use Instant instead of ZonedDateTime", replaceWith = ReplaceWith("getInstant"))
 fun JSONObject.getZonedDateTime(key: String): ZonedDateTime =
     getString(key).let { ZonedDateTime.parse(it) }
 
@@ -112,6 +115,7 @@ fun JSONObject.getZonedDateTime(key: String): ZonedDateTime =
  *
  * @return A [ZonedDateTime] which is the value, or null, if there isn't any stored value with the given key.
  */
+@Deprecated("Use Instant instead of ZonedDateTime", replaceWith = ReplaceWith("getInstantOrNull"))
 fun JSONObject.getZonedDateTimeOrNull(key: String): ZonedDateTime? = try {
     if (has(key)) getString(key).let { ZonedDateTime.parse(it) } else null
 } catch (_: JSONException) {
@@ -119,6 +123,38 @@ fun JSONObject.getZonedDateTimeOrNull(key: String): ZonedDateTime? = try {
 } catch (_: DateTimeParseException) {
     null
 }
+
+/**
+ * Retrieves the value associated with the specified key as an Instant.
+ *
+ * @param key the key to retrieve the value for
+ *
+ * @throws JSONException     if there is no value for the given key.
+ * @throws DateTimeException if the instant exceeds the maximum or minimum instant
+ *
+ * @return the value associated with the specified key as an Instant
+ */
+fun JSONObject.getInstant(key: String): Instant = getLong(key).let { Instant.ofEpochMilli(it) }
+
+/**
+ * Retrieves the value associated with the given key as an Instant object, or null if the key is not found or the value
+ * cannot be parsed as an Instant.
+ *
+ * @param key the key of the value to retrieve
+ *
+ * @return the value associated with the key as an Instant object if found and valid, or null if not found or invalid
+ */
+fun JSONObject.getInstantOrNull(key: String): Instant? = getLongOrNull(key)?.let { Instant.ofEpochMilli(it) }
+
+/**
+ * Adds an Instant value to the JSONObject under the given key.
+ *
+ * @param key The key to associate with the Instant value.
+ * @param instant The Instant value to be added.
+ *
+ * @return Returns a reference to this JSONObject, to enable method chaining.
+ */
+fun JSONObject.putInstant(key: String, instant: Instant): JSONObject = put(key, instant.toEpochMilli())
 
 /**
  * Gets the [T] object associated with a key. Fetches a [String] first, converts it into [JSONObject], and uses
@@ -206,6 +242,7 @@ fun jsonOf(vararg pairs: Pair<String, Any?>) =
             when (value) {
                 is JsonSerializable -> put(key, value.toJSON())
                 is ZonedDateTime -> put(key, value.toString())
+                is Instant -> putInstant(key, value)
                 is Enum<*> -> put(key, value.name)
                 is UUID -> put(key, value.toString())
                 is ByteArray -> putByteArray(key, value)
