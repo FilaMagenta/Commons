@@ -1,7 +1,7 @@
 package com.arnyminerz.filamagenta.commons.data.types
 
 import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializable
-import java.time.ZonedDateTime
+import java.time.Instant
 
 /**
  * Provides a common class for all the types of data.
@@ -12,5 +12,5 @@ import java.time.ZonedDateTime
  */
 abstract class DataType(
     open val id: Long,
-    open val timestamp: ZonedDateTime
+    open val timestamp: Instant
 ) : JsonSerializable

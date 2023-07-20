@@ -1,18 +1,18 @@
 package com.arnyminerz.filamagenta.commons.data.types
 
 import com.arnyminerz.filamagenta.commons.utils.getByteArray
+import com.arnyminerz.filamagenta.commons.utils.getInstant
 import com.arnyminerz.filamagenta.commons.utils.getStringOrNull
 import com.arnyminerz.filamagenta.commons.utils.getUUID
-import com.arnyminerz.filamagenta.commons.utils.getZonedDateTime
 import com.arnyminerz.filamagenta.commons.utils.jsonOf
 import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializer
-import java.time.ZonedDateTime
+import java.time.Instant
 import java.util.UUID
 import org.json.JSONObject
 
 data class EventPaymentType(
     override val id: Long,
-    override val timestamp: ZonedDateTime,
+    override val timestamp: Instant,
     val uuid: UUID,
     val amount: Double,
     val signature: ByteArray,
@@ -23,7 +23,7 @@ data class EventPaymentType(
     companion object: JsonSerializer<EventPaymentType> {
         override suspend fun fromJson(json: JSONObject): EventPaymentType = EventPaymentType(
             json.getLong("id"),
-            json.getZonedDateTime("timestamp"),
+            json.getInstant("timestamp"),
             json.getUUID("uuid"),
             json.getDouble("amount"),
             json.getByteArray("signature"),

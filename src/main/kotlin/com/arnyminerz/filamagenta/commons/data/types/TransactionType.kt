@@ -1,15 +1,16 @@
 package com.arnyminerz.filamagenta.commons.data.types
 
+import com.arnyminerz.filamagenta.commons.utils.getInstant
 import com.arnyminerz.filamagenta.commons.utils.getLongOrNull
-import com.arnyminerz.filamagenta.commons.utils.getZonedDateTime
+import com.arnyminerz.filamagenta.commons.utils.jsonOf
 import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializer
-import java.time.ZonedDateTime
+import java.time.Instant
 import org.json.JSONObject
 
 data class TransactionType(
     override val id: Long,
-    override val timestamp: ZonedDateTime,
-    val date: ZonedDateTime,
+    override val timestamp: Instant,
+    val date: Instant,
     val amount: Long,
     val pricePerUnit: Double,
     val description: String,
@@ -19,8 +20,8 @@ data class TransactionType(
     companion object: JsonSerializer<TransactionType> {
         override suspend fun fromJson(json: JSONObject): TransactionType = TransactionType(
             json.getLong("id"),
-            json.getZonedDateTime("timestamp"),
-            json.getZonedDateTime("date"),
+            json.getInstant("timestamp"),
+            json.getInstant("date"),
             json.getLong("amount"),
             json.getDouble("price_per_unit"),
             json.getString("description"),
@@ -29,17 +30,16 @@ data class TransactionType(
         )
     }
 
-    val balance: Double
-        get() = amount * pricePerUnit
+    val balance: Double = amount * pricePerUnit
 
-    override fun toJSON(): JSONObject = JSONObject().apply {
-        put("id", id)
-        put("timestamp", timestamp.toString())
-        put("date", date.toString())
-        put("amount", amount)
-        put("price_per_unit", pricePerUnit)
-        put("description", description)
-        put("user_id", userId)
-        put("item_id", itemId)
-    }
+    override fun toJSON(): JSONObject = jsonOf(
+        "id" to id,
+        "timestamp" to timestamp,
+        "date" to date,
+        "amount" to amount,
+        "price_per_unit" to pricePerUnit,
+        "description" to description,
+        "user_id" to userId,
+        "item_id" to itemId
+    )
 }

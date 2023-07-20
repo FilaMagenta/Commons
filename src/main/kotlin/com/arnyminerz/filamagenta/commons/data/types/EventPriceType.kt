@@ -2,10 +2,10 @@ package com.arnyminerz.filamagenta.commons.data.types
 
 import com.arnyminerz.filamagenta.commons.data.Category
 import com.arnyminerz.filamagenta.commons.utils.getEnum
-import com.arnyminerz.filamagenta.commons.utils.getZonedDateTime
+import com.arnyminerz.filamagenta.commons.utils.getInstant
 import com.arnyminerz.filamagenta.commons.utils.jsonOf
 import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializer
-import java.time.ZonedDateTime
+import java.time.Instant
 import org.json.JSONObject
 
 /**
@@ -25,7 +25,7 @@ import org.json.JSONObject
  */
 data class EventPriceType(
     override val id: Long,
-    override val timestamp: ZonedDateTime,
+    override val timestamp: Instant,
     val price: Double,
     val category: Category,
     val eventId: Long
@@ -33,7 +33,7 @@ data class EventPriceType(
     companion object: JsonSerializer<EventPriceType> {
         override suspend fun fromJson(json: JSONObject): EventPriceType = EventPriceType(
             json.getLong("id"),
-            json.getZonedDateTime("timestamp"),
+            json.getInstant("timestamp"),
             json.getDouble("price"),
             json.getEnum("category"),
             json.getLong("event_id")
