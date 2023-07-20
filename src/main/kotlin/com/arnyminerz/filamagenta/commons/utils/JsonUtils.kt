@@ -4,6 +4,7 @@ import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializable
 import com.arnyminerz.filamagenta.commons.utils.serialization.JsonSerializer
 import java.time.ZonedDateTime
 import java.time.format.DateTimeParseException
+import java.util.UUID
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -169,6 +170,16 @@ inline fun <reified T: Enum<T>> JSONObject.getEnum(key: String): T =
 inline fun <reified T: Enum<T>> JSONObject.getEnumOrNull(key: String): T? =
     getStringOrNull(key)?.let { name -> enumValues<T>().find { it.name == name } }
 
+/**
+ * Gets the UUID stored at [key]. Must follow the format specified in [UUID.toString].
+ *
+ * @throws JSONException If there is no string value for the key.
+ *
+ * @return The UUID stored at [key].
+ */
+fun JSONObject.getUUID(key: String): UUID =
+    getString(key).let { UUID.fromString(it) }
+
 fun jsonOf(vararg pairs: Pair<String, Any?>) =
     JSONObject().apply {
         for ((key, value) in pairs)
@@ -176,6 +187,7 @@ fun jsonOf(vararg pairs: Pair<String, Any?>) =
                 is JsonSerializable -> put(key, value.toJSON())
                 is ZonedDateTime -> put(key, value.toString())
                 is Enum<*> -> put(key, value.name)
+                is UUID -> put(key, value.toString())
                 else -> put(key, value)
             }
     }
