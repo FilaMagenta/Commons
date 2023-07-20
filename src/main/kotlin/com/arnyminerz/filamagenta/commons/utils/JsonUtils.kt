@@ -241,7 +241,7 @@ fun jsonOf(vararg pairs: Pair<String, Any?>) =
         for ((key, value) in pairs)
             when (value) {
                 is JsonSerializable -> put(key, value.toJSON())
-                is ZonedDateTime -> put(key, value.toString())
+                is ZonedDateTime -> putInstant(key, value.toInstant())
                 is Instant -> putInstant(key, value)
                 is Enum<*> -> put(key, value.name)
                 is UUID -> put(key, value.toString())
