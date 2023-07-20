@@ -1,5 +1,6 @@
 package com.arnyminerz.filamagenta.commons.data.types
 
+import com.arnyminerz.filamagenta.commons.utils.getByteArray
 import com.arnyminerz.filamagenta.commons.utils.getStringOrNull
 import com.arnyminerz.filamagenta.commons.utils.getUUID
 import com.arnyminerz.filamagenta.commons.utils.getZonedDateTime
@@ -14,7 +15,7 @@ data class EventPaymentType(
     override val timestamp: ZonedDateTime,
     val uuid: UUID,
     val amount: Double,
-    val signature: String,
+    val signature: ByteArray,
     val externalReference: String?,
     val eventId: Long,
     val userId: Long
@@ -25,7 +26,7 @@ data class EventPaymentType(
             json.getZonedDateTime("timestamp"),
             json.getUUID("uuid"),
             json.getDouble("amount"),
-            json.getString("signature"),
+            json.getByteArray("signature"),
             json.getStringOrNull("external_reference"),
             json.getLong("event_id"),
             json.getLong("user_id")
@@ -42,4 +43,34 @@ data class EventPaymentType(
         "event_id" to eventId,
         "user_id" to userId
     )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as EventPaymentType
+
+        if (id != other.id) return false
+        if (timestamp != other.timestamp) return false
+        if (uuid != other.uuid) return false
+        if (amount != other.amount) return false
+        if (!signature.contentEquals(other.signature)) return false
+        if (externalReference != other.externalReference) return false
+        if (eventId != other.eventId) return false
+        if (userId != other.userId) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + timestamp.hashCode()
+        result = 31 * result + uuid.hashCode()
+        result = 31 * result + amount.hashCode()
+        result = 31 * result + signature.contentHashCode()
+        result = 31 * result + (externalReference?.hashCode() ?: 0)
+        result = 31 * result + eventId.hashCode()
+        result = 31 * result + userId.hashCode()
+        return result
+    }
 }
